@@ -1,0 +1,8 @@
+streamlit
+PyMuPDF
+instructor
+groq
+pydantic
+rapidfuzz
+xlsxwriter
+pandas
