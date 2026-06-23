@@ -35,9 +35,9 @@ def annotate_pdf(pdf_bytes: bytes, quotes_and_indices: list) -> bytes:
                     # Add highlight
                     annot = page.add_highlight_annot(inst)
                     annot.update()
-                    # Add red numerical marker [index] to the left
+                    # Add red numerical marker [index] to the left (using standard "helv" font)
                     rect = fitz.Rect(max(0, inst.x0 - 25), inst.y0, inst.x0, inst.y0 + 12)
-                    page.insert_textbox(rect, f"[{index}]", color=(1, 0, 0), fontsize=10, fontname="helv-bold", align=fitz.TEXT_ALIGN_RIGHT)
+                    page.insert_textbox(rect, f"[{index}]", color=(1, 0, 0), fontsize=10, fontname="helv", align=fitz.TEXT_ALIGN_RIGHT)
                 found = True
                 break
                 
@@ -55,7 +55,7 @@ def annotate_pdf(pdf_bytes: bytes, quotes_and_indices: list) -> bytes:
                         annot.update()
                         
                         rect = fitz.Rect(max(0, inst.x0 - 25), inst.y0, inst.x0, inst.y0 + 12)
-                        page.insert_textbox(rect, f"[{index}]", color=(1, 0, 0), fontsize=10, fontname="helv-bold", align=fitz.TEXT_ALIGN_RIGHT)
+                        page.insert_textbox(rect, f"[{index}]", color=(1, 0, 0), fontsize=10, fontname="helv", align=fitz.TEXT_ALIGN_RIGHT)
                         
                         found = True
                         break
