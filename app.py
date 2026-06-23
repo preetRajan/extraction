@@ -1,6 +1,7 @@
 import streamlit as st
 import base64
 import pandas as pd
+import fitz  # Added for image rendering
 from auth import vault
 from schema_engine import get_template_names, get_template_schema
 from pdf_processor import extract_text_from_pdf, annotate_pdf
@@ -119,8 +120,12 @@ if 'records' in st.session_state and 'annotated_pdf_bytes' in st.session_state:
             
     with col2:
         st.subheader("Live PDF Preview")
-        # Embed PDF using base64 and iframe
-        base64_pdf = base64.b64encode(st.session_state.annotated_pdf_bytes).decode('utf-8')
-        pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="800" type="application/pdf"></iframe>'
-        st.markdown(pdf_display, unsafe_allow_html=True)
-
+        # Convert PDF pages to images using PyMuPDF to bypass browser iframe blocks
+        try:
+            doc = fitz.open(stream=st.session_state.annotated_pdf_bytes, filetype="pdf")
+            for page_num in range(len(doc)):
+                page = doc.load_page(page_num)
+                pix = page.get_pixmap(dpi=150) # 150 DPI is a good balance of quality and performance
+                st.image(pix.tobytes("png"), caption=f"Page {page_num + 1}", use_container_width=True)
+        except Exception as e:
+            st.error(f"Could not render PDF preview: {e}")
