@@ -356,7 +356,7 @@ def build_dynamic_schema(template_name: str, schema_dict: dict) -> Type[BaseMode
             verbatim_quote=(Optional[str], Field(default=None, description="Exact 5 to 12 words from the source text where this metric was found. DO NOT paraphrase."))
         )
         
-        fields[param_name] = (NestedModel, Field(default=None, description=f"Extraction wrapper for {param_name}"))
+        fields[param_name] = (Optional[NestedModel], Field(default=None, description=f"Extraction wrapper for {param_name}"))
     
     # Create the top level model
     return create_model(f"{template_name.replace(' ', '')}Schema", **fields)
